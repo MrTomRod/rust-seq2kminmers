@@ -54,8 +54,8 @@ impl<'a> NtHashSIMDIterator<'a> {
 
         let mask = _mm512_cmp_epu32_mask(_hVal, _hashBound, 1 /*LT*/);
         let nb_ones = mask.count_ones() as usize;
-        _mm512_mask_compressstoreu_epi32(hashes_ptr as *mut u8, mask, _hVal);
-        _mm512_mask_compressstoreu_epi32(pos_ptr as *mut u8, mask, _positions);
+        _mm512_mask_compressstoreu_epi32(hashes_ptr as *mut i32, mask, _hVal);
+        _mm512_mask_compressstoreu_epi32(pos_ptr as *mut i32, mask, _positions);
         _positions = _mm512_add_epi32(_positions, _16);
 
         NtHashSIMDIterator {
@@ -136,8 +136,8 @@ impl<'a> Iterator for NtHashSIMDIterator<'a> {
                         mask &= (((1 as u32) << (sentinel % 16) as u32) - 1) as u16; // ignore the rest of the buffer, the string end earlier
                         nb_ones = mask.count_ones();
                     }
-                    _mm512_mask_compressstoreu_epi32(self.hashes_ptr  as *mut u8, mask, _hVal);
-                    _mm512_mask_compressstoreu_epi32(self.pos_ptr  as *mut u8, mask, _positions);                
+                    _mm512_mask_compressstoreu_epi32(self.hashes_ptr  as *mut i32, mask, _hVal);
+                    _mm512_mask_compressstoreu_epi32(self.pos_ptr  as *mut i32, mask, _positions);                
                 }
                 _positions = _mm512_add_epi32(_positions, _16);
                 if nb_ones > 0

@@ -97,7 +97,7 @@ pub fn encode_rle_simd(s: &[u8]) -> (String,Vec<u32>)
             // store both the positions and the HPC sequence
             //_mm256_mask_compressstoreu_epi8(res_ptr.offset(hpc_len) as *mut u8, _v_cmp_mask, v256);
             //_mm512_mask_compressstoreu_epi8(res_ptr.offset(hpc_len) as *mut u8, _v_cmp_mask, v);
-            //_mm_mask_compressstoreu_epi8(res_ptr.offset(hpc_len) as *mut u8, mask, v128);
+            //_mm_mask_compressstoreu_epi8(res_ptr.offset(hpc_len) as *mut i32, mask, v128);
             // would be nice to use these ^ but my machine doesnt support it
             let tmp_res_512 = _mm512_setzero_si512();
             let v128_512 = _mm512_cvtepi8_epi32(v128);
@@ -105,7 +105,7 @@ pub fn encode_rle_simd(s: &[u8]) -> (String,Vec<u32>)
             let tmp_res_128 = _mm512_cvtepi32_epi8(tmp_res_512);
             let mask128 = ((((1 as u32) << mask.count_ones()) as u32) - 1) as u16;
             _mm_mask_storeu_epi8            (res_ptr.offset(hpc_len as isize) as *mut i8, mask128, tmp_res_128);
-            _mm512_mask_compressstoreu_epi32(pos_ptr.offset(hpc_len as isize) as *mut u8, mask,    _positions);
+            _mm512_mask_compressstoreu_epi32(pos_ptr.offset(hpc_len as isize) as *mut i32, mask,    _positions);
         
              _positions = _mm512_add_epi32(_positions, _16);
             hpc_len += mask.count_ones() as usize;
@@ -130,7 +130,7 @@ pub fn encode_rle_simd(s: &[u8]) -> (String,Vec<u32>)
             let tmp_res_128 = _mm512_cvtepi32_epi8(tmp_res_512);
             let mask128 = ((((1 as u32) << mask.count_ones()) as u32) - 1) as u16;
             _mm_mask_storeu_epi8            (res_ptr.offset(hpc_len as isize) as *mut i8, mask128, tmp_res_128);
-            _mm512_mask_compressstoreu_epi32(pos_ptr.offset(hpc_len as isize) as *mut u8, mask,    _positions);
+            _mm512_mask_compressstoreu_epi32(pos_ptr.offset(hpc_len as isize) as *mut i32, mask,    _positions);
              _positions = _mm512_add_epi32(_positions, _16);
             hpc_len += mask.count_ones() as usize;
         }
