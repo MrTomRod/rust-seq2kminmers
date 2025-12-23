@@ -523,4 +523,3 @@ unsafe fn _mm512_NTC_epu32_sliding(kmerSeq: &[u8], offsetOut: usize, offsetIn: u
 
     (_hVal, _fhVal, _rhVal)
 }
-

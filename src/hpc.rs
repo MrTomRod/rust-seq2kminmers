@@ -145,4 +145,3 @@ pub fn encode_rle_simd(s: &[u8]) -> (String,Vec<u32>)
     }
     //(String::new(),Vec::new())
 }
-
