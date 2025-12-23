@@ -1,5 +1,4 @@
-#![feature(core_intrinsics)]
-#![feature(stdarch_x86_avx512)]
+
 use nthash32::NtHashIterator;
 mod kminmer;
 pub use kminmer::{Kminmer, KminmerVec, KminmerHash};
